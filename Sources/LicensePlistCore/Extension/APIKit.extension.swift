@@ -19,4 +19,17 @@ extension LicensePlistExtension where Base: Session {
             return self.sendSync(request)
         }
     }
+
+    static var shared: Session {
+        Session(adapter: GitHubURLSessionAdapter(configuration: .default))
+    }
+}
+
+final class GitHubURLSessionAdapter: URLSessionAdapter {
+    // This method is to assist with persistence of an authorization token incase of a redirect.
+    func urlSession(_ session: URLSession, task: URLSessionTask, willPerformHTTPRedirection response: HTTPURLResponse, newRequest request: URLRequest) async -> URLRequest? {
+        var request = request
+        request.setValue(task.originalRequest?.value(forHTTPHeaderField: "Authorization"), forHTTPHeaderField: "Authorization")
+        return request
+    }
 }

@@ -10,7 +10,7 @@ class RepoRequestsTests: XCTestCase {
     }
     func testLicense() {
         let request = RepoRequests.License(owner: "mono0926", repo: "NativePopup")
-        let result = Session.shared.lp.sendSync(request)
+        let result = Session.lp.shared.lp.sendSync(request)
         switch result {
         case .success(let response):
             XCTAssertTrue(response.contentDecoded.hasPrefix("MIT License"))
