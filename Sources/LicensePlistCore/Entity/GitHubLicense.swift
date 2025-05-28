@@ -30,7 +30,7 @@ extension GitHubLicense {
     let name = library.name
     Log.info("license download start(owner: \(owner), name: \(name))")
     return ResultOperation<GitHubLicense, DownloadError> { _ in
-      let result = Session.shared.lp.sendSync(RepoRequests.License(owner: owner, repo: name))
+    let result = Session.lp.shared.lp.sendSync(RepoRequests.License(owner: owner, repo: name))
       switch result {
       case .failure(let error):
         let statusCode = self.statusCode(from: error)
@@ -48,7 +48,7 @@ extension GitHubLicense {
         Log.warning(
           "404 error, license download failed(owner: \(owner), name: \(name)), so finding parent..."
         )
-        let result = Session.shared.lp.sendSync(RepoRequests.Get(owner: owner, repo: name))
+          let result = Session.lp.shared.lp.sendSync(RepoRequests.Get(owner: owner, repo: name))
         switch result {
         case .failure(let error):
           return Result.failure(DownloadError.unexpected(error))
